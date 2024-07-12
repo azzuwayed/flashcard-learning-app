@@ -1,0 +1,14 @@
+# constants.py
+DEFAULT_FONT = "Helvetica"
+DEFAULT_RESOLUTION = "800x600"
+DEFAULT_FONT_SIZE = 12
+DEFAULT_STUDY_SESSION_LENGTH = 20
+
+DEFAULT_COLORS = {
+    "bg": "#F5F5F5",
+    "fg": "#333333",
+    "button": "#E0E0E0",
+    "accent": "#6200EE"
+}
+
+RESOLUTIONS = ["800x600", "1024x768", "1280x720"]

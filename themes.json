@@ -1,0 +1,72 @@
+{
+    "light": {
+        "colors": {
+            "background": "#FFFFFF",
+            "foreground": "#000000",
+            "button": "#E0E0E0",
+            "button_text": "#000000",
+            "accent": "#1976D2",
+            "error": "#D32F2F"
+        },
+        "fonts": {
+            "main": {
+                "family": "Helvetica",
+                "size": 12
+            },
+            "header": {
+                "family": "Helvetica",
+                "size": 18,
+                "weight": "bold"
+            }
+        },
+        "styles": {
+            "button": {
+                "padding": 10,
+                "borderwidth": 0
+            },
+            "entry": {
+                "borderwidth": 1
+            },
+            "treeview": {
+                "rowheight": 25,
+                "background": "#FFFFFF",
+                "fieldbackground": "#FFFFFF"
+            }
+        }
+    },
+    "dark": {
+        "colors": {
+            "background": "#121212",
+            "foreground": "#FFFFFF",
+            "button": "#BB86FC",
+            "button_text": "#000000",
+            "accent": "#03DAC6",
+            "error": "#CF6679"
+        },
+        "fonts": {
+            "main": {
+                "family": "Helvetica",
+                "size": 12
+            },
+            "header": {
+                "family": "Helvetica",
+                "size": 18,
+                "weight": "bold"
+            }
+        },
+        "styles": {
+            "button": {
+                "padding": 10,
+                "borderwidth": 0
+            },
+            "entry": {
+                "borderwidth": 1
+            },
+            "treeview": {
+                "rowheight": 25,
+                "background": "#1E1E1E",
+                "fieldbackground": "#1E1E1E"
+            }
+        }
+    }
+}
