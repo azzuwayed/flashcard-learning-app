@@ -133,7 +133,7 @@ dmypy.json
 cython_debug/
 
 # PyCharm
-.idea/
+.idea
 
 # VSCode
 .vscode/

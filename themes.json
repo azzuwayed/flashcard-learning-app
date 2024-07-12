@@ -1,6 +1,6 @@
 {
     "light": {
-        "name": "Light",
+        "name": "Bright Light",
         "colors": {
             "background": "#FFFFFF",
             "foreground": "#333333",
@@ -36,7 +36,7 @@
         }
     },
     "dark": {
-        "name": "Dark",
+        "name": "Midnight Dark",
         "colors": {
             "background": "#1E1E1E",
             "foreground": "#D4D4D4",
@@ -144,7 +144,7 @@
         }
     },
     "nord": {
-        "name": "Nord",
+        "name": "Nord Dark",
         "colors": {
             "background": "#2E3440",
             "foreground": "#D8DEE9",
@@ -252,7 +252,7 @@
         }
     },
     "dracula": {
-        "name": "Dracula",
+        "name": "Dracula Dark",
         "colors": {
             "background": "#282A36",
             "foreground": "#F8F8F2",
