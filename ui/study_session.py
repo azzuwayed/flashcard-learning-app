@@ -41,14 +41,19 @@ class StudySession(ttk.Frame):
         super().__init__(parent)
         self.controller = controller
         self.options = options
-        self.current_card_index = 0
         self.study_deck = self.get_study_deck()
+        self.current_card_index = 0
         self.session_stats = {"total": len(self.study_deck), "correct": 0, "incorrect": 0}
         self.create_widgets()
 
     def get_study_deck(self):
         try:
-            flashcards = self.controller.db_manager.get_flashcards_by_categories(self.options["categories"])
+            category_ids = [cat['id'] for cat in self.controller.categories if cat['name'] in self.options['categories']]
+            flashcards = self.controller.db_manager.get_flashcards_by_categories(category_ids)
+            
+            if not flashcards:
+                return []
+
             weighted_deck = []
             for card in flashcards:
                 weight = self.calculate_card_weight(card[0])

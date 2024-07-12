@@ -50,18 +50,20 @@ class CategoryManager(ttk.Frame):
         
         item = self.tree.item(selected[0])
         category_name, category_color = item['values']
+        category_id = self.controller.db_manager.get_category_id_by_name(category_name)
+        
+        if not category_id:
+            self.controller.show_toast("Category not found")
+            return
+        
         dialog = CategoryDialog(self, "Edit Category", category_name, category_color)
         if dialog.result:
-            category_id = self.controller.db_manager.get_category_id_by_name(category_name)
-            if category_id:
-                success = self.controller.db_manager.update_category(category_id, dialog.result["name"], dialog.result["color"])
-                if success:
-                    self.controller.show_toast(f"Category '{dialog.result['name']}' updated successfully")
-                    self.load_categories()
-                else:
-                    self.controller.show_toast("Failed to update category")
+            success = self.controller.db_manager.update_category(category_id, dialog.result["name"], dialog.result["color"])
+            if success:
+                self.controller.show_toast(f"Category '{dialog.result['name']}' updated successfully")
+                self.load_categories()
             else:
-                self.controller.show_toast("Category not found")
+                self.controller.show_toast("Failed to update category")
 
     def delete_category(self):
         selected = self.tree.selection()
@@ -76,18 +78,19 @@ class CategoryManager(ttk.Frame):
             self.controller.show_toast("Cannot delete the Default category")
             return
         
-        if tk.messagebox.askyesno("Confirm Deletion", f"Are you sure you want to delete the category '{category_name}'?"):
-            category_id = self.controller.db_manager.get_category_id_by_name(category_name)
-            if category_id:
-                success = self.controller.db_manager.delete_category(category_id)
-                if success:
-                    self.controller.show_toast(f"Category '{category_name}' deleted successfully")
-                    self.load_categories()
-                else:
-                    self.controller.show_toast("Failed to delete category")
+        category_id = self.controller.db_manager.get_category_id_by_name(category_name)
+        if not category_id:
+            self.controller.show_toast("Category not found")
+            return
+        
+        if tk.messagebox.askyesno("Confirm Deletion", f"Are you sure you want to delete the category '{category_name}'? All flashcards in this category will be moved to the Default category."):
+            success = self.controller.db_manager.delete_category(category_id)
+            if success:
+                self.controller.show_toast(f"Category '{category_name}' deleted successfully")
+                self.load_categories()
             else:
-                self.controller.show_toast("Category not found")
-
+                self.controller.show_toast("Failed to delete category")
+                
 class CategoryDialog:
     def __init__(self, parent, title, name="", color="#000000"):
         self.top = tk.Toplevel(parent)

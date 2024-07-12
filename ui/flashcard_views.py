@@ -57,6 +57,10 @@ class FlashcardViews(ttk.Frame):
         ttk.Button(button_frame, text="Save", command=self.save_flashcard).pack(side=tk.LEFT, padx=(0, 10))
         ttk.Button(button_frame, text="Clear", command=self.clear_form).pack(side=tk.LEFT)
 
+        # Bind Enter key to save_flashcard method
+        self.question_entry.bind("<Return>", lambda event: self.answer_entry.focus())
+        self.answer_entry.bind("<Return>", lambda event: self.save_flashcard())
+
     def save_flashcard(self):
         question = self.question_entry.get().strip()
         answer = self.answer_entry.get().strip()
@@ -75,16 +79,14 @@ class FlashcardViews(ttk.Frame):
         if new_id:
             self.controller.flashcards.append((new_id, question, answer, category))
             self.controller.show_toast("Flashcard added successfully!")
-            self.clear_form()
-            self.controller.load_data()  # Reload data to ensure consistency
-            self.controller.show_main_menu()  # Return to main menu after adding
+            self.clear_form()  # Clear the form for the next entry
         else:
             self.controller.show_toast("Failed to add flashcard. Please try again.")
 
     def clear_form(self):
         self.question_entry.delete(0, tk.END)
         self.answer_entry.delete(0, tk.END)
-        self.category_var.set('')
+        self.question_entry.focus()  # Set focus back to the question entry
 
     def create_edit_flashcards(self):
         tree = ttk.Treeview(self, columns=("ID", "Question", "Answer", "Category"), show="headings")

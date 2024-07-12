@@ -1,10 +1,11 @@
 {
     "light": {
+        "name": "Light",
         "colors": {
             "background": "#FFFFFF",
-            "foreground": "#000000",
+            "foreground": "#333333",
             "button": "#E0E0E0",
-            "button_text": "#000000",
+            "button_text": "#333333",
             "accent": "#1976D2",
             "error": "#D32F2F"
         },
@@ -35,13 +36,14 @@
         }
     },
     "dark": {
+        "name": "Dark",
         "colors": {
-            "background": "#121212",
-            "foreground": "#FFFFFF",
-            "button": "#BB86FC",
-            "button_text": "#000000",
-            "accent": "#03DAC6",
-            "error": "#CF6679"
+            "background": "#1E1E1E",
+            "foreground": "#D4D4D4",
+            "button": "#2D2D2D",
+            "button_text": "#D4D4D4",
+            "accent": "#569CD6",
+            "error": "#F44747"
         },
         "fonts": {
             "main": {
@@ -64,8 +66,224 @@
             },
             "treeview": {
                 "rowheight": 25,
-                "background": "#1E1E1E",
-                "fieldbackground": "#1E1E1E"
+                "background": "#252526",
+                "fieldbackground": "#252526"
+            }
+        }
+    },
+    "solarized_light": {
+        "name": "Solarized Light",
+        "colors": {
+            "background": "#FDF6E3",
+            "foreground": "#657B83",
+            "button": "#EEE8D5",
+            "button_text": "#657B83",
+            "accent": "#268BD2",
+            "error": "#DC322F"
+        },
+        "fonts": {
+            "main": {
+                "family": "Helvetica",
+                "size": 12
+            },
+            "header": {
+                "family": "Helvetica",
+                "size": 18,
+                "weight": "bold"
+            }
+        },
+        "styles": {
+            "button": {
+                "padding": 10,
+                "borderwidth": 0
+            },
+            "entry": {
+                "borderwidth": 1
+            },
+            "treeview": {
+                "rowheight": 25,
+                "background": "#FDF6E3",
+                "fieldbackground": "#FDF6E3"
+            }
+        }
+    },
+    "solarized_dark": {
+        "name": "Solarized Dark",
+        "colors": {
+            "background": "#002B36",
+            "foreground": "#839496",
+            "button": "#073642",
+            "button_text": "#93A1A1",
+            "accent": "#2AA198",
+            "error": "#DC322F"
+        },
+        "fonts": {
+            "main": {
+                "family": "Helvetica",
+                "size": 12
+            },
+            "header": {
+                "family": "Helvetica",
+                "size": 18,
+                "weight": "bold"
+            }
+        },
+        "styles": {
+            "button": {
+                "padding": 10,
+                "borderwidth": 0
+            },
+            "entry": {
+                "borderwidth": 1
+            },
+            "treeview": {
+                "rowheight": 25,
+                "background": "#073642",
+                "fieldbackground": "#073642"
+            }
+        }
+    },
+    "nord": {
+        "name": "Nord",
+        "colors": {
+            "background": "#2E3440",
+            "foreground": "#D8DEE9",
+            "button": "#3B4252",
+            "button_text": "#E5E9F0",
+            "accent": "#88C0D0",
+            "error": "#BF616A"
+        },
+        "fonts": {
+            "main": {
+                "family": "Helvetica",
+                "size": 12
+            },
+            "header": {
+                "family": "Helvetica",
+                "size": 18,
+                "weight": "bold"
+            }
+        },
+        "styles": {
+            "button": {
+                "padding": 10,
+                "borderwidth": 0
+            },
+            "entry": {
+                "borderwidth": 1
+            },
+            "treeview": {
+                "rowheight": 25,
+                "background": "#3B4252",
+                "fieldbackground": "#3B4252"
+            }
+        }
+    },
+    "gruvbox_light": {
+        "name": "Gruvbox Light",
+        "colors": {
+            "background": "#FBF1C7",
+            "foreground": "#3C3836",
+            "button": "#EBDBB2",
+            "button_text": "#3C3836",
+            "accent": "#458588",
+            "error": "#CC241D"
+        },
+        "fonts": {
+            "main": {
+                "family": "Helvetica",
+                "size": 12
+            },
+            "header": {
+                "family": "Helvetica",
+                "size": 18,
+                "weight": "bold"
+            }
+        },
+        "styles": {
+            "button": {
+                "padding": 10,
+                "borderwidth": 0
+            },
+            "entry": {
+                "borderwidth": 1
+            },
+            "treeview": {
+                "rowheight": 25,
+                "background": "#FBF1C7",
+                "fieldbackground": "#FBF1C7"
+            }
+        }
+    },
+    "gruvbox_dark": {
+        "name": "Gruvbox Dark",
+        "colors": {
+            "background": "#282828",
+            "foreground": "#EBDBB2",
+            "button": "#3C3836",
+            "button_text": "#EBDBB2",
+            "accent": "#B8BB26",
+            "error": "#FB4934"
+        },
+        "fonts": {
+            "main": {
+                "family": "Helvetica",
+                "size": 12
+            },
+            "header": {
+                "family": "Helvetica",
+                "size": 18,
+                "weight": "bold"
+            }
+        },
+        "styles": {
+            "button": {
+                "padding": 10,
+                "borderwidth": 0
+            },
+            "entry": {
+                "borderwidth": 1
+            },
+            "treeview": {
+                "rowheight": 25,
+                "background": "#3C3836",
+                "fieldbackground": "#3C3836"
+            }
+        }
+    },
+    "dracula": {
+        "name": "Dracula",
+        "colors": {
+            "background": "#282A36",
+            "foreground": "#F8F8F2",
+            "button": "#44475A",
+            "button_text": "#F8F8F2",
+            "accent": "#BD93F9",
+            "error": "#FF5555"
+        },
+        "fonts": {
+            "main": {
+                "family": "Helvetica",
+                "size": 12
+            },
+            "header": {
+                "family": "Helvetica",
+                "size": 18,
+                "weight": "bold"
+            }
+        },
+        "styles": {
+            "button": {
+                "padding": 10,
+                "borderwidth": 0
+            },
+            "entry": {
+                "borderwidth": 1
+            },
+            "treeview": {
+                "rowheight": 25,
+                "background": "#44475A",
+                "fieldbackground": "#44475A"
             }
         }
     }

@@ -12,7 +12,9 @@ class MainMenu(ttk.Frame):
             ("Edit Flashcards", controller.edit_flashcards, "✏️"),
             ("Start Study Session", controller.start_study_session, "🎓"),
             ("View Progress", controller.view_progress, "📊"),
-            ("Manage Categories", controller.manage_categories, "🗂️")
+            ("Manage Categories", controller.manage_categories, "🗂️"),
+            ("Settings", controller.show_settings, "⚙️"),
+            ("Quit App", controller.quit_app, "🚪")
         ]
 
         for text, command, icon in buttons:

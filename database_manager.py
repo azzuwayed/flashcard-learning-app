@@ -59,8 +59,6 @@ class DatabaseManager:
                 self.cursor.execute('INSERT INTO categories (name, color) VALUES (?, ?)', ("Default", "#808080"))
                 self.conn.commit()
                 print("Default category initialized.")
-            else:
-                print("Default category already exists.")
         except sqlite3.Error as e:
             print(f"Error initializing default category: {e}")
 
@@ -167,6 +165,15 @@ class DatabaseManager:
             print(f"Error adding category: {e}")
             return None
 
+    def get_category_id_by_name(self, category_name):
+        try:
+            self.cursor.execute('SELECT id FROM categories WHERE name = ?', (category_name,))
+            result = self.cursor.fetchone()
+            return result[0] if result else None
+        except sqlite3.Error as e:
+            print(f"Error getting category ID: {e}")
+            return None
+
     def update_category(self, id, name, color):
         try:
             self.cursor.execute('UPDATE categories SET name = ?, color = ? WHERE id = ?', (name, color, id))
@@ -178,6 +185,12 @@ class DatabaseManager:
 
     def delete_category(self, id):
         try:
+            # First, update all flashcards with this category to use the default category
+            default_category = self.get_default_category()
+            if default_category:
+                self.cursor.execute('UPDATE flashcards SET category_id = ? WHERE category_id = ?', (default_category['id'], id))
+            
+            # Now delete the category
             self.cursor.execute('DELETE FROM categories WHERE id = ?', (id,))
             self.conn.commit()
             return True

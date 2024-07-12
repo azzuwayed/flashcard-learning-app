@@ -74,7 +74,9 @@ class FlashcardApp:
                             foreground=colors["button_text"],
                             font=(fonts["main"]["family"], main_font_size, "bold"),
                             padding=int(styles["button"]["padding"] * self.scaling_factor))
-        self.style.map("TButton", background=[("active", colors["accent"])])
+        self.style.map("TButton", 
+                       background=[("active", colors["accent"])],
+                       foreground=[("active", colors["background"])])
         
         # Configure entries and comboboxes
         entry_height = int(30 * self.scaling_factor)
@@ -144,9 +146,6 @@ class FlashcardApp:
 
         self.title_label = ttk.Label(self.header_frame, text="Flashcard App", style="Header.TLabel")
         self.title_label.pack(side=tk.LEFT, padx=20)
-
-        self.settings_button = ttk.Button(self.header_frame, text="⚙️", command=self.show_settings, style="Header.TButton")
-        self.settings_button.pack(side=tk.RIGHT)
 
     def go_back(self):
         self.show_main_menu()
@@ -220,3 +219,9 @@ class FlashcardApp:
 
     def __del__(self):
         self.db_manager.close()
+
+    def quit_app(self):
+        if messagebox.askyesno("Quit", "Are you sure you want to quit the application?"):
+            self.db_manager.close()  # Ensure database connection is closed
+            self.root.quit()
+            self.root.destroy()
