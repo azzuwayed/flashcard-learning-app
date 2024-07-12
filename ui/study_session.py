@@ -1,9 +1,27 @@
+"""
+study_session.py
+
+This file contains the PreStudyOptionsDialog class for setting up study session options,
+and the StudySession class for managing the study session itself.
+"""
+
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, messagebox
 import random
 
 class PreStudyOptionsDialog:
+    """
+    A dialog for setting up the study session options.
+    """
+    
     def __init__(self, parent, categories):
+        """
+        Initialize the PreStudyOptionsDialog.
+
+        Parameters:
+        - parent (tk.Widget): The parent widget.
+        - categories (list): The list of categories.
+        """
         self.top = tk.Toplevel(parent)
         self.top.title("Study Session Options")
         self.categories = categories
@@ -27,6 +45,7 @@ class PreStudyOptionsDialog:
         parent.wait_window(self.top)
 
     def save(self):
+        """Save the selected options and close the dialog."""
         self.result = {
             "length": self.length_var.get(),
             "categories": [name for name, var in self.category_vars if var.get()]
@@ -34,10 +53,23 @@ class PreStudyOptionsDialog:
         self.top.destroy()
 
     def show(self):
+        """Return the selected options."""
         return self.result
 
 class StudySession(ttk.Frame):
+    """
+    A class to manage the study session.
+    """
+    
     def __init__(self, parent, controller, options):
+        """
+        Initialize the StudySession.
+
+        Parameters:
+        - parent (tk.Widget): The parent widget.
+        - controller (FlashcardApp): The main application controller.
+        - options (dict): The options for the study session.
+        """
         super().__init__(parent)
         self.controller = controller
         self.options = options
@@ -47,6 +79,7 @@ class StudySession(ttk.Frame):
         self.create_widgets()
 
     def get_study_deck(self):
+        """Prepare the study deck based on the selected categories and session length."""
         try:
             category_ids = [cat['id'] for cat in self.controller.categories if cat['name'] in self.options['categories']]
             flashcards = self.controller.db_manager.get_flashcards_by_categories(category_ids)
@@ -65,6 +98,7 @@ class StudySession(ttk.Frame):
             return []
 
     def create_widgets(self):
+        """Create the widgets for the study session."""
         if not self.study_deck:
             ttk.Label(self, text="No flashcards available for the selected categories.", wraplength=300).pack(pady=20)
             ttk.Button(self, text="Back to Main Menu", command=self.controller.show_main_menu).pack(pady=10)
@@ -85,13 +119,25 @@ class StudySession(ttk.Frame):
         button_frame = ttk.Frame(self)
         button_frame.pack(fill=tk.X, pady=20)
 
-        ttk.Button(button_frame, text="Show Answer", command=self.show_answer).pack(side=tk.TOP, fill=tk.X, pady=(0, 10))
-        ttk.Button(button_frame, text="Correct ✅", command=self.mark_correct).pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 5))
-        ttk.Button(button_frame, text="Incorrect ❌", command=self.mark_incorrect).pack(side=tk.RIGHT, fill=tk.X, expand=True, padx=(5, 0))
+        self.show_answer_button = ttk.Button(button_frame, text="Show Answer", command=self.show_answer)
+        self.show_answer_button.pack(side=tk.TOP, fill=tk.X, pady=(0, 10))
+        self.correct_button = ttk.Button(button_frame, text="Correct ✅", command=self.mark_correct, state="disabled")
+        self.correct_button.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 5))
+        self.incorrect_button = ttk.Button(button_frame, text="Incorrect ❌", command=self.mark_incorrect, state="disabled")
+        self.incorrect_button.pack(side=tk.RIGHT, fill=tk.X, expand=True, padx=(5, 0))
 
         self.show_question()
 
     def calculate_card_weight(self, card_id):
+        """
+        Calculate the weight of a flashcard based on its study history.
+
+        Parameters:
+        - card_id (int): The ID of the flashcard.
+
+        Returns:
+        - int: The weight of the flashcard.
+        """
         try:
             history = self.controller.db_manager.get_study_history(card_id)
             if not history:
@@ -101,40 +147,53 @@ class StudySession(ttk.Frame):
         except Exception as e:
             self.controller.error_handler.show_error("Failed to calculate card weight", str(e))
             return 1
+
     def show_question(self):
+        """Display the current question."""
         if self.current_card_index < len(self.study_deck):
             self.progress_label.config(text=f"Question {self.current_card_index + 1}/{self.session_stats['total']}")
             self.question_label.config(text=self.study_deck[self.current_card_index][1])
             self.answer_label.config(text="")
             
+            self.correct_button.config(state="disabled")
+            self.incorrect_button.config(state="disabled")
+            self.show_answer_button.config(state="normal")
+
             progress = (self.current_card_index + 1) / self.session_stats['total'] * 100
             self.progress_bar["value"] = progress
         else:
             self.show_session_summary()
 
     def show_answer(self):
+        """Display the answer to the current question."""
         self.answer_label.config(text=self.study_deck[self.current_card_index][2])
+        self.correct_button.config(state="normal")
+        self.incorrect_button.config(state="normal")
+        self.show_answer_button.config(state="disabled")
 
     def mark_correct(self):
+        """Mark the current question as correct and move to the next question."""
         self.controller.db_manager.add_study_result(self.study_deck[self.current_card_index][0], True)
         self.session_stats["correct"] += 1
-        self.controller.show_toast("Correct!")
         self.next_question()
 
     def mark_incorrect(self):
+        """Mark the current question as incorrect and move to the next question."""
         self.controller.db_manager.add_study_result(self.study_deck[self.current_card_index][0], False)
         self.session_stats["incorrect"] += 1
-        self.controller.show_toast("Incorrect")
         self.next_question()
 
     def next_question(self):
-        self.current_card_index += 1
-        if self.current_card_index < len(self.study_deck):
-            while self.current_card_index < len(self.study_deck) - 1 and self.study_deck[self.current_card_index][1] == self.study_deck[self.current_card_index - 1][1]:
-                self.current_card_index += 1
+        """Move to the next question in the study deck, ensuring no duplicate questions in a row."""
+        previous_question = self.study_deck[self.current_card_index][1]
+        while self.current_card_index < len(self.study_deck):
+            self.current_card_index += 1
+            if self.current_card_index < len(self.study_deck) and self.study_deck[self.current_card_index][1] != previous_question:
+                break
         self.show_question()
 
     def show_session_summary(self):
+        """Display the summary of the study session."""
         for widget in self.winfo_children():
             widget.destroy()
 
@@ -153,6 +212,12 @@ class StudySession(ttk.Frame):
         ttk.Button(self, text="Back to Main Menu", command=self.controller.show_main_menu).pack(pady=(20, 0))
 
     def create_circular_progress_bar(self, percentage):
+        """
+        Create a circular progress bar to display the accuracy percentage.
+
+        Parameters:
+        - percentage (float): The accuracy percentage.
+        """
         canvas = tk.Canvas(self, width=100, height=100, bg=self.controller.style.lookup("TFrame", "background"))
         canvas.pack(pady=20)
 

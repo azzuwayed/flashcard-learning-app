@@ -1,13 +1,32 @@
+"""
+category_manager.py
+
+This file contains the CategoryManager class for managing flashcard categories.
+"""
+
 import tkinter as tk
-from tkinter import ttk, colorchooser
+from tkinter import ttk, colorchooser, messagebox
+import logging
 
 class CategoryManager(ttk.Frame):
+    """
+    A class to manage the flashcard categories.
+    """
+    
     def __init__(self, parent, controller):
+        """
+        Initialize the CategoryManager.
+
+        Parameters:
+        - parent (tk.Widget): The parent widget.
+        - controller (FlashcardApp): The main application controller.
+        """
         super().__init__(parent)
         self.controller = controller
         self.create_widgets()
 
     def create_widgets(self):
+        """Create the widgets for the CategoryManager."""
         # Category List
         self.tree = ttk.Treeview(self, columns=("Name", "Color"), show="headings")
         self.tree.heading("Name", text="Category Name")
@@ -27,12 +46,14 @@ class CategoryManager(ttk.Frame):
         self.load_categories()
 
     def load_categories(self):
+        """Load the categories from the database and display them in the treeview."""
         self.tree.delete(*self.tree.get_children())
         categories = self.controller.db_manager.get_all_categories()
         for category in categories:
             self.tree.insert("", "end", values=(category["name"], category["color"]))
 
     def add_category(self):
+        """Handle the Add Category button click event."""
         dialog = CategoryDialog(self, "Add Category")
         if dialog.result:
             new_id = self.controller.db_manager.add_category(dialog.result["name"], dialog.result["color"])
@@ -43,6 +64,7 @@ class CategoryManager(ttk.Frame):
                 self.controller.show_toast("Failed to add category")
 
     def edit_category(self):
+        """Handle the Edit Category button click event."""
         selected = self.tree.selection()
         if not selected:
             self.controller.show_toast("Please select a category to edit")
@@ -66,6 +88,7 @@ class CategoryManager(ttk.Frame):
                 self.controller.show_toast("Failed to update category")
 
     def delete_category(self):
+        """Handle the Delete Category button click event."""
         selected = self.tree.selection()
         if not selected:
             self.controller.show_toast("Please select a category to delete")
@@ -83,16 +106,29 @@ class CategoryManager(ttk.Frame):
             self.controller.show_toast("Category not found")
             return
         
-        if tk.messagebox.askyesno("Confirm Deletion", f"Are you sure you want to delete the category '{category_name}'? All flashcards in this category will be moved to the Default category."):
+        if messagebox.askyesno("Confirm Deletion", f"Are you sure you want to delete the category '{category_name}'? All flashcards in this category will be moved to the Default category."):
             success = self.controller.db_manager.delete_category(category_id)
             if success:
                 self.controller.show_toast(f"Category '{category_name}' deleted successfully")
                 self.load_categories()
             else:
                 self.controller.show_toast("Failed to delete category")
-                
+
 class CategoryDialog:
+    """
+    A dialog for adding or editing a category.
+    """
+    
     def __init__(self, parent, title, name="", color="#000000"):
+        """
+        Initialize the CategoryDialog.
+
+        Parameters:
+        - parent (tk.Widget): The parent widget.
+        - title (str): The title of the dialog.
+        - name (str): The name of the category (for editing).
+        - color (str): The color of the category (for editing).
+        """
         self.top = tk.Toplevel(parent)
         self.top.title(title)
         self.result = None
@@ -116,18 +152,21 @@ class CategoryDialog:
         parent.wait_window(self.top)
 
     def choose_color(self):
+        """Open a color chooser dialog to select a category color."""
         color = colorchooser.askcolor(initialcolor=self.color)[1]
         if color:
             self.color = color
             self.update_color_button()
 
     def update_color_button(self):
+        """Update the color button text to show the selected color."""
         self.color_button.configure(text=f"Color: {self.color}")
 
     def save(self):
+        """Handle the Save button click event."""
         name = self.name_entry.get().strip()
         if name:
             self.result = {"name": name, "color": self.color}
             self.top.destroy()
         else:
-            tk.messagebox.showwarning("Invalid Input", "Category name cannot be empty.")
+            messagebox.showwarning("Invalid Input", "Category name cannot be empty.")
